@@ -1,3 +1,5 @@
+const { getCardDisplayValue, getSuitSymbol, getCardColor } = require('./card-utils')
+
 const CARD_ABILITIES = {
   PEEK_SELF: 'peek_self',
   SPY: 'spy',
@@ -636,7 +638,14 @@ class GameEngine {
         handSum: this.calculateHandSum(p),
         roundScore: p.roundScore,
         totalScore: p.totalScore,
-        calledCabo: p.hasCalledCabo
+        calledCabo: p.hasCalledCabo,
+        cards: (p.cards || []).map(card => ({
+          value: card.value,
+          suit: card.suit,
+          displayValue: getCardDisplayValue(card.value),
+          suitSymbol: getSuitSymbol(card.suit),
+          color: getCardColor(card)
+        }))
       }))
     })
 

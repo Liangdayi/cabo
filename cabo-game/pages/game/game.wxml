@@ -306,6 +306,24 @@
     <view class="modal-content result-modal">
       <text class="modal-title">回合结束</text>
       
+      <!-- 玩家卡牌展示区域 -->
+      <view class="round-cards-display" wx:if="{{roundEndData && roundEndData.length > 0}}">
+        <view class="player-cards-section" wx:for="{{roundEndData}}" wx:key="id">
+          <view class="player-cards-header">
+            <text class="player-cards-name">{{item.name}}</text>
+            <text class="player-cards-sum">手牌值: {{item.handSum}}</text>
+            <text class="player-cards-cabo" wx:if="{{item.calledCabo}}">CABO</text>
+          </view>
+          <view class="player-cards-row" wx:if="{{item.cards && item.cards.length > 0}}">
+            <view class="card card-front round-end-card" wx:for="{{item.cards}}" wx:for-item="card" wx:key="value">
+              <text class="card-value" style="color: {{card.color}}">{{card.displayValue}}</text>
+              <text class="card-suit" style="color: {{card.color}}">{{card.suitSymbol}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 计分区域 -->
       <view class="result-list">
         <view class="result-item" wx:for="{{roundEndData}}" wx:key="id">
           <text class="result-name">{{item.name}}</text>

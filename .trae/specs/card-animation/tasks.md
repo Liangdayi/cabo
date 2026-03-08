@@ -85,3 +85,52 @@
   - `human-judgement` TR-7.1: 动画流畅不卡顿
   - `human-judgement` TR-7.2: 动画在不同设备上表现一致
 - **Notes**: 重点关注动画性能和用户体验
+
+## [x] 任务8: 修改游戏引擎，在回合结束时包含手牌信息
+- **Priority**: P0
+- **Depends On**: None
+- **Description**:
+  - 修改game-engine.js中的ROUND_END事件，添加每个玩家的手牌信息
+  - 手牌信息应包含卡牌数值、花色、显示值等
+- **Acceptance Criteria Addressed**: AC-6
+- **Test Requirements**:
+  - `programmatic` TR-8.1: roundEndData中包含cards数组
+  - `programmatic` TR-8.2: 每张卡牌包含value、suit、displayValue、suitSymbol、color属性
+- **Notes**: 需要使用getCardDisplayValue、getSuitSymbol、getCardColor等辅助函数
+
+## [x] 任务9: 修改WXML，显示每个玩家的卡牌
+- **Priority**: P0
+- **Depends On**: 任务8
+- **Description**:
+  - 修改回合结束模态框的WXML结构
+  - 在计分上方添加卡牌展示区域
+  - 显示每个玩家的名字和对应的卡牌
+- **Acceptance Criteria Addressed**: AC-6
+- **Test Requirements**:
+  - `human-judgement` TR-9.1: 每个玩家的卡牌正确显示
+  - `human-judgement` TR-9.2: 卡牌数值和花色清晰可见
+- **Notes**: 使用现有的card样式类
+
+## [x] 任务10: 添加CSS样式
+- **Priority**: P1
+- **Depends On**: 任务9
+- **Description**:
+  - 为回合结束卡牌展示区域添加样式
+  - 确保卡牌布局美观，易于查看
+- **Acceptance Criteria Addressed**: AC-6
+- **Test Requirements**:
+  - `human-judgement` TR-10.1: 卡牌布局整齐美观
+  - `human-judgement` TR-10.2: 不同玩家之间有明确分隔
+- **Notes**: 参考现有的卡牌样式
+
+## [x] 任务11: 测试回合结束明牌功能
+- **Priority**: P2
+- **Depends On**: 任务8, 任务9, 任务10
+- **Description**:
+  - 测试回合结束时卡牌正确显示
+  - 确保所有玩家的卡牌都能正确展示
+- **Acceptance Criteria Addressed**: AC-6
+- **Test Requirements**:
+  - `human-judgement` TR-11.1: 回合结束时能看到所有玩家的卡牌
+  - `human-judgement` TR-11.2: 卡牌信息准确无误
+- **Notes**: 测试不同游戏场景

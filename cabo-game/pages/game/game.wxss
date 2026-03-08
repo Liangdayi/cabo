@@ -972,3 +972,66 @@
   font-size: 28rpx;
   margin-top: 8rpx;
 }
+
+/* ============ 回合结束卡牌展示 ============ */
+
+.round-cards-display {
+  width: 100%;
+  max-height: 400rpx;
+  overflow-y: auto;
+  margin-bottom: 20rpx;
+}
+
+.player-cards-section {
+  margin-bottom: 24rpx;
+  padding: 16rpx;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12rpx;
+}
+
+.player-cards-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.player-cards-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.player-cards-sum {
+  font-size: 24rpx;
+  color: #29ffc6;
+}
+
+.player-cards-cabo {
+  font-size: 22rpx;
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.2);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.player-cards-row {
+  display: flex;
+  justify-content: center;
+  gap: 8rpx;
+  flex-wrap: nowrap;
+}
+
+.round-end-card {
+  width: 70rpx;
+  height: 100rpx;
+  border-radius: 6rpx;
+}
+
+.round-end-card .card-value {
+  font-size: 24rpx;
+}
+
+.round-end-card .card-suit {
+  font-size: 18rpx;
+}
