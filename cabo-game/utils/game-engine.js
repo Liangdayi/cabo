@@ -642,9 +642,11 @@ class GameEngine {
 
     if (this.checkGameEnd()) {
       this.endGame()
-    } else {
-      this.startNextRound()
     }
+  }
+
+  startNextRoundAfterConfirm() {
+    this.startNextRound()
   }
 
   checkGameEnd() {
@@ -684,9 +686,6 @@ class GameEngine {
     this.initializeDeck()
     this.dealCards()
     
-    const startPlayerIndex = this.getLowestScorePlayerIndex()
-    this.currentPlayerIndex = startPlayerIndex
-    
     const firstDiscard = this.drawPile.pop()
     firstDiscard.isFaceUp = true
     firstDiscard.canPick = true
@@ -694,7 +693,10 @@ class GameEngine {
     
     this.caboCaller = null
     this.remainingTurnsAfterCabo = 0
-    this.turnPhase = 'action'
+    this.gamePhase = 'peek'
+    this.turnPhase = 'peek_select'
+    this.currentPlayerIndex = 0
+    this.peekingPlayerIndex = 0
 
     this.players.forEach(player => {
       player.hasCalledCabo = false
@@ -702,9 +704,9 @@ class GameEngine {
     })
 
     this.notify('NEW_ROUND', {
-      roundNumber: this.roundNumber,
-      startPlayer: this.getCurrentPlayer()
+      roundNumber: this.roundNumber
     })
+    this.startPeekPhaseForCurrentPlayer()
   }
 
   getLowestScorePlayerIndex() {

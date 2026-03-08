@@ -709,7 +709,7 @@ Page({
 
   onCloseRoundEndModal() {
     this.setData({ showRoundEndModal: false })
-    this.updateUI()
+    this.gameEngine.startNextRoundAfterConfirm()
   },
 
   onCloseGameEndModal() {
