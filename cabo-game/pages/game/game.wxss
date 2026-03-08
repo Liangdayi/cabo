@@ -546,6 +546,19 @@
   margin-top: 8rpx;
 }
 
+.spy-cards {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  flex-wrap: wrap;
+  margin-bottom: 30rpx;
+}
+
+.spy-card {
+  width: 120rpx;
+  height: 160rpx;
+}
+
 .swap-modal {
   max-height: 85vh;
 }
@@ -578,6 +591,28 @@
 
 .result-modal {
   max-height: 80vh;
+}
+
+.ability-result-modal {
+  max-width: 500rpx;
+}
+
+.ability-result-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30rpx 0;
+}
+
+.ability-hint {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.ability-result-card {
+  width: 160rpx;
+  height: 220rpx;
 }
 
 .winner-text {

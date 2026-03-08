@@ -39,10 +39,14 @@ Page({
     showSpyModal: false,
     spyTargetPlayerIndex: -1,
     spyCard: null,
+    showSpyCardSelectModal: false,
+    spyTargetCards: [],
     showSwapModal: false,
     swapMyCardIndex: -1,
     swapTargetPlayerIndex: -1,
     swapTargetCardIndex: -1,
+    showAbilityResultModal: false,
+    abilityResultData: null,
     showResultModal: false,
     resultData: null,
     showRoundEndModal: false,
@@ -439,7 +443,12 @@ Page({
   },
 
   onActionUseAbility() {
-    this.setData({ showAbilityModal: true })
+    const card = this.data.drawnCard
+    this.setData({ 
+      showAbilityModal: true,
+      abilityCard: card,
+      abilityType: getAbilityType(card.value)
+    })
   },
 
   onSelectExchangeCard(e) {
@@ -528,7 +537,7 @@ Page({
     const myCards = this.data.myCards
     const card = myCards[index]
     
-    if (card.isKnown) {
+    if (card.isKnown || card.isFaceUp) {
       wx.showToast({ title: '这张牌你已经知道了', icon: 'none' })
       return
     }
@@ -539,16 +548,47 @@ Page({
       id: this.data.abilityCard.id
     }, true)
     
-    this.gameEngine.useAbility('peek_self', { cardIndex: index })
+    const result = this.gameEngine.useAbility('peek_self', { cardIndex: index })
     
     this.setData({
       showPeekModal: false,
-      abilityCard: null
+      abilityCard: null,
+      showAbilityResultModal: true,
+      abilityResultData: {
+        type: 'peek_self',
+        title: '偷看自己的牌',
+        card: result.card,
+        cardIndex: index
+      }
     })
   },
 
   onSelectSpyTarget(e) {
     const playerIndex = e.currentTarget.dataset.playerIndex
+    const targetPlayer = this.data.opponents.find((_, i) => i + 1 === playerIndex)
+    
+    if (!targetPlayer) {
+      wx.showToast({ title: '无效的对手', icon: 'none' })
+      return
+    }
+    
+    const targetCards = targetPlayer.cards.map((card, index) => ({
+      index: index,
+      isFaceUp: card.isFaceUp,
+      displayValue: card.isFaceUp ? card.value : '?'
+    }))
+    
+    this.setData({
+      showSpyModal: false,
+      spyTargetPlayerIndex: playerIndex,
+      showSpyCardSelectModal: true,
+      spyTargetCards: targetCards
+    })
+  },
+
+  onSelectSpyCard(e) {
+    const cardIndex = e.currentTarget.dataset.index
+    const playerIndex = this.data.spyTargetPlayerIndex
     
     this.gameEngine.discardCard({
       value: this.data.abilityCard.value,
@@ -556,14 +596,35 @@ Page({
       id: this.data.abilityCard.id
     }, true)
     
-    this.gameEngine.useAbility('spy', { 
+    const result = this.gameEngine.useAbility('spy', { 
       playerIndex: playerIndex,
-      cardIndex: Math.floor(Math.random() * 4)
+      cardIndex: cardIndex
     })
     
+    const targetPlayer = this.data.opponents.find((_, i) => i + 1 === playerIndex)
+    
     this.setData({
-      showSpyModal: false,
-      abilityCard: null
+      showSpyCardSelectModal: false,
+      abilityCard: null,
+      spyTargetPlayerIndex: -1,
+      spyTargetCards: [],
+      showAbilityResultModal: true,
+      abilityResultData: {
+        type: 'spy',
+        title: '查看对手的牌',
+        targetName: targetPlayer ? targetPlayer.name : '对手',
+        card: result.card,
+        cardIndex: cardIndex
+      }
+    })
+  },
+
+  onCloseSpyCardSelectModal() {
+    this.setData({
+      showSpyCardSelectModal: false,
+      spyTargetPlayerIndex: -1,
+      spyTargetCards: [],
+      showSpyModal: true
     })
   },
 
@@ -620,6 +681,14 @@ Page({
 
   onCloseSwapModal() {
     this.setData({ showSwapModal: false })
+  },
+
+  onCloseAbilityResultModal() {
+    this.setData({ 
+      showAbilityResultModal: false,
+      abilityResultData: null
+    })
+    this.updateUI()
   },
 
   onCardTap(e) {

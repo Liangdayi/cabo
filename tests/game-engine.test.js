@@ -386,6 +386,64 @@ describe('GameEngine', () => {
       const topCard = gameEngine.discardPile[gameEngine.discardPile.length - 1]
       expect(topCard.canPick).toBe(false)
     })
+
+    test('7/8能力应返回卡牌信息用于显示', () => {
+      const card = { value: 7, suit: 0, id: 'test-7' }
+      gameEngine.discardCard(card, true)
+      
+      const result = gameEngine.useAbility('peek_self', { cardIndex: 0 })
+      
+      expect(result.success).toBe(true)
+      expect(result.card).toBeDefined()
+      expect(result.card.value).toBeDefined()
+      expect(result.card.suit).toBeDefined()
+    })
+
+    test('9/10能力应返回卡牌信息用于显示', () => {
+      const card = { value: 9, suit: 0, id: 'test-9' }
+      gameEngine.discardCard(card, true)
+      
+      const result = gameEngine.useAbility('spy', { 
+        playerIndex: 1, 
+        cardIndex: 0 
+      })
+      
+      expect(result.success).toBe(true)
+      expect(result.card).toBeDefined()
+      expect(result.card.value).toBeDefined()
+      expect(result.card.suit).toBeDefined()
+    })
+
+    test('9/10能力应允许选择任意对手的牌', () => {
+      const card = { value: 10, suit: 0, id: 'test-10' }
+      gameEngine.discardCard(card, true)
+      
+      const result1 = gameEngine.useAbility('spy', { playerIndex: 1, cardIndex: 0 })
+      expect(result1.success).toBe(true)
+      
+      gameEngine.currentPlayerIndex = 0
+      const card2 = { value: 10, suit: 1, id: 'test-10-2' }
+      gameEngine.discardCard(card2, true)
+      const result2 = gameEngine.useAbility('spy', { playerIndex: 1, cardIndex: 2 })
+      expect(result2.success).toBe(true)
+    })
+
+    test('11/12能力交换后牌的正反面状态保持不变', () => {
+      const card = { value: 11, suit: 0, id: 'test-11' }
+      gameEngine.discardCard(card, true)
+      
+      const myCardWasFaceUp = gameEngine.players[0].cards[0].isFaceUp
+      const theirCardWasFaceUp = gameEngine.players[1].cards[0].isFaceUp
+      
+      gameEngine.useAbility('swap', {
+        myCardIndex: 0,
+        targetPlayerIndex: 1,
+        targetCardIndex: 0
+      })
+      
+      expect(gameEngine.players[0].cards[0].isFaceUp).toBe(theirCardWasFaceUp)
+      expect(gameEngine.players[1].cards[0].isFaceUp).toBe(myCardWasFaceUp)
+    })
   })
 
   describe('CABO喊叫机制', () => {
