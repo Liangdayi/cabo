@@ -607,7 +607,7 @@ class GameEngine {
         if (handSum === minSum) {
           player.roundScore = 0
         } else {
-          player.roundScore = handSum
+          player.roundScore = handSum + 10
         }
       } else {
         player.roundScore = handSum
