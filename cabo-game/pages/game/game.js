@@ -58,7 +58,7 @@ Page({
     showPeekPhase: false,
     peekMessage: '',
     peekSelectedCount: 0,
-    peekCountdown: 10,
+    peekCountdown: 3,
     peekViewingCards: []
   },
 
@@ -104,7 +104,7 @@ Page({
             showPeekPhase: true,
             peekMessage: data.message,
             peekSelectedCount: 0,
-            peekCountdown: 10,
+            peekCountdown: 3,
             peekViewingCards: []
           })
         } else {
