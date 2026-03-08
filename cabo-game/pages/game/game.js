@@ -184,23 +184,33 @@ Page({
         break
         
       case 'ABILITY_PEEK_SELF':
-        this.setData({
-          showPeekModal: true,
-          peekCard: data.card,
-          peekCardIndex: data.cardIndex
-        })
+        if (data.player.id === 'player_0') {
+          this.setData({
+            showPeekModal: true,
+            peekCard: data.card,
+            peekCardIndex: data.cardIndex
+          })
+        } else {
+          this.showMessage(`${data.player.name} 查看了自己的牌`)
+        }
         break
         
       case 'ABILITY_SPY':
-        this.setData({
-          showSpyModal: true,
-          spyCard: data.card,
-          spyTargetPlayerIndex: data.targetPlayer.id
-        })
+        if (data.player.id === 'player_0') {
+          this.setData({
+            showSpyModal: true,
+            spyCard: data.card,
+            spyTargetPlayerIndex: data.targetPlayer.id
+          })
+        } else {
+          this.showMessage(`${data.player.name} 查看了对手的牌`)
+        }
         break
         
       case 'ABILITY_SWAP':
-        this.showMessage('交换成功！')
+        if (data.player && data.player.id !== 'player_0') {
+          this.showMessage(`${data.player.name} 交换了牌`)
+        }
         this.updateUI()
         break
         
