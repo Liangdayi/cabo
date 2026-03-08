@@ -129,12 +129,12 @@
       <text class="modal-hint">可以选择1张或多张牌进行交换</text>
       
       <view class="exchange-cards">
-        <view class="card card-{{item.isKnown || item.isFaceUp ? 'front' : 'back'}} exchange-card {{selectedExchangeIndices.indexOf(index) >= 0 ? 'selected' : ''}}" 
+        <view class="card card-{{item.isFaceUp ? 'front' : 'back'}} exchange-card {{selectedExchangeIndices.indexOf(index) >= 0 ? 'selected' : ''}}" 
               wx:for="{{myCards}}" 
               wx:key="index"
               bindtap="onSelectExchangeCard"
               data-index="{{index}}">
-          <block wx:if="{{item.isKnown || item.isFaceUp}}">
+          <block wx:if="{{item.isFaceUp}}">
             <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
             <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
           </block>
@@ -172,12 +172,12 @@
       <text class="modal-hint">选择一张暗牌查看</text>
       
       <view class="exchange-cards">
-        <view class="card card-{{item.isKnown || item.isFaceUp ? 'front' : 'back'}} exchange-card" 
+        <view class="card card-{{item.isFaceUp ? 'front' : 'back'}} exchange-card" 
               wx:for="{{myCards}}" 
               wx:key="index"
               bindtap="onSelectPeekCard"
               data-index="{{index}}">
-          <block wx:if="{{item.isKnown || item.isFaceUp}}">
+          <block wx:if="{{item.isFaceUp}}">
             <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
             <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
           </block>
@@ -251,12 +251,12 @@
       <view class="swap-section">
         <text class="swap-label">选择你的牌</text>
         <view class="swap-cards">
-          <view class="card card-{{item.isKnown || item.isFaceUp ? 'front' : 'back'}} swap-card {{swapMyCardIndex === index ? 'selected' : ''}}" 
+          <view class="card card-{{item.isFaceUp ? 'front' : 'back'}} swap-card {{swapMyCardIndex === index ? 'selected' : ''}}" 
                 wx:for="{{myCards}}" 
                 wx:key="index"
                 bindtap="onSelectSwapMyCard"
                 data-index="{{index}}">
-            <block wx:if="{{item.isKnown || item.isFaceUp}}">
+            <block wx:if="{{item.isFaceUp}}">
               <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
             </block>
             <block wx:else>
@@ -316,16 +316,16 @@
       <view class="ability-result-content" wx:if="{{abilityResultData.type === 'peek_self'}}">
         <text class="ability-hint">你的第 {{abilityResultData.cardIndex + 1}} 张牌是:</text>
         <view class="card card-front ability-result-card">
-          <text class="card-value" style="color: {{abilityResultData.card.color || '#333'}}">{{abilityResultData.card.displayValue || abilityResultData.card.value}}</text>
-          <text class="card-suit" style="color: {{abilityResultData.card.color || '#333'}}">{{abilityResultData.card.suitSymbol || abilityResultData.card.suit}}</text>
+          <text class="card-value" style="color: {{abilityResultData.card.color}}">{{abilityResultData.card.displayValue}}</text>
+          <text class="card-suit" style="color: {{abilityResultData.card.color}}">{{abilityResultData.card.suitSymbol}}</text>
         </view>
       </view>
       
       <view class="ability-result-content" wx:if="{{abilityResultData.type === 'spy'}}">
         <text class="ability-hint">{{abilityResultData.targetName}}的第 {{abilityResultData.cardIndex + 1}} 张牌是:</text>
         <view class="card card-front ability-result-card">
-          <text class="card-value" style="color: {{abilityResultData.card.color || '#333'}}">{{abilityResultData.card.displayValue || abilityResultData.card.value}}</text>
-          <text class="card-suit" style="color: {{abilityResultData.card.color || '#333'}}">{{abilityResultData.card.suitSymbol || abilityResultData.card.suit}}</text>
+          <text class="card-value" style="color: {{abilityResultData.card.color}}">{{abilityResultData.card.displayValue}}</text>
+          <text class="card-suit" style="color: {{abilityResultData.card.color}}">{{abilityResultData.card.suitSymbol}}</text>
         </view>
       </view>
       

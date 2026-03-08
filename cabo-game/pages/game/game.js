@@ -537,8 +537,8 @@ Page({
     const myCards = this.data.myCards
     const card = myCards[index]
     
-    if (card.isKnown || card.isFaceUp) {
-      wx.showToast({ title: '这张牌你已经知道了', icon: 'none' })
+    if (card.isFaceUp) {
+      wx.showToast({ title: '这张牌已经是明牌了', icon: 'none' })
       return
     }
     
@@ -557,7 +557,13 @@ Page({
       abilityResultData: {
         type: 'peek_self',
         title: '偷看自己的牌',
-        card: result.card,
+        card: {
+          value: result.card.value,
+          suit: result.card.suit,
+          displayValue: getCardDisplayValue(result.card.value),
+          suitSymbol: getSuitSymbol(result.card.suit),
+          color: getCardColor(result.card)
+        },
         cardIndex: index
       }
     })
@@ -613,7 +619,13 @@ Page({
         type: 'spy',
         title: '查看对手的牌',
         targetName: targetPlayer ? targetPlayer.name : '对手',
-        card: result.card,
+        card: {
+          value: result.card.value,
+          suit: result.card.suit,
+          displayValue: getCardDisplayValue(result.card.value),
+          suitSymbol: getSuitSymbol(result.card.suit),
+          color: getCardColor(result.card)
+        },
         cardIndex: cardIndex
       }
     })
