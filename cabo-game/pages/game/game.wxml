@@ -1,3 +1,16 @@
+<!-- 飞行动画容器 - 放在最外层确保不被遮挡 -->
+<view class="flying-card-container" wx:if="{{flyingCards.length > 0}}">
+  <view class="flying-card {{item.type}} {{item.flying ? 'flying' : ''}}" 
+        wx:for="{{flyingCards}}" 
+        wx:key="id"
+        style="left: {{item.currentX}}px; top: {{item.currentY}}px; transform: {{item.transform}}; opacity: {{item.opacity}};">
+    <block wx:if="{{item.isFaceUp}}">
+      <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+      <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
+    </block>
+  </view>
+</view>
+
 <view class="game-container">
   <view class="toast" wx:if="{{showMessage}}">{{message}}</view>
   
@@ -78,7 +91,7 @@
     </view>
     
     <view class="my-cards">
-      <view class="card card-{{item.isFaceUp ? 'front' : 'back'}}" 
+      <view class="card card-{{item.isFaceUp ? 'front' : 'back'}} {{item.animation}}" 
             wx:for="{{myCards}}" 
             wx:key="index"
             bindtap="onCardTap"
@@ -98,7 +111,7 @@
     <view class="action-sheet-mask" bindtap="onCancelExchange"></view>
     <view class="action-sheet-content">
       <view class="drawn-card-display">
-        <view class="card card-front drawn-card">
+        <view class="card card-front drawn-card {{drawnCard.animation}}">
           <text class="card-value" style="color: {{drawnCard.color}}">{{drawnCard.displayValue}}</text>
           <text class="card-suit" style="color: {{drawnCard.color}}">{{drawnCard.suitSymbol}}</text>
         </view>
@@ -129,19 +142,20 @@
       <text class="modal-hint">可以选择1张或多张牌进行交换</text>
       
       <view class="exchange-cards">
-        <view class="card card-{{item.isFaceUp ? 'front' : 'back'}} exchange-card {{selectedExchangeIndices.indexOf(index) >= 0 ? 'selected' : ''}}" 
+        <view class="card card-{{item.isFaceUp ? 'front' : 'back'}} exchange-card {{item.isSelected ? 'selected' : ''}}" 
               wx:for="{{myCards}}" 
-              wx:key="index"
+              wx:for-index="cardIndex"
+              wx:key="cardIndex"
               bindtap="onSelectExchangeCard"
-              data-index="{{index}}">
+              data-index="{{cardIndex}}">
           <block wx:if="{{item.isFaceUp}}">
             <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
             <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
           </block>
           <block wx:else>
-            <text class="card-index">{{index + 1}}</text>
+            <text class="card-index">{{cardIndex + 1}}</text>
           </block>
-          <view class="select-mark" wx:if="{{selectedExchangeIndices.indexOf(index) >= 0}}">✓</view>
+          <view class="select-mark" wx:if="{{item.isSelected}}">✓</view>
         </view>
       </view>
       
