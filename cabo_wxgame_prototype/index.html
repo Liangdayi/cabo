@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cabo - 记忆与博弈</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto+Sans+SC', sans-serif; background-color: #f0f2f5; }
+        .app-container { width: 375px; height: 812px; overflow: hidden; position: relative; background: linear-gradient(180deg, #1a2a6c 0%, #203a43 50%, #2c5364 100%); }
+        .glass-effect { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-primary { background: linear-gradient(90deg, #0cebeb, #20e3b2, #29ffc6); transition: all 0.3s ease; }
+        .btn-primary:active { transform: scale(0.95); opacity: 0.9; }
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+<div class="app-container shadow-2xl rounded-[40px] border-[8px] border-black text-white relative">
+<!-- 状态栏 -->
+<div class="flex justify-between items-center px-8 pt-4 pb-2 text-xs opacity-80">
+<span>09:41</span>
+<div class="flex gap-1 items-center">
+<span class="iconify" data-icon="material-symbols:signal-cellular-4-bar"></span>
+<span class="iconify" data-icon="material-symbols:wifi"></span>
+<span class="iconify" data-icon="material-symbols:battery-full"></span>
+</div>
+</div>
+<!-- 页面内容 -->
+<div class="flex flex-col items-center h-full px-6 pt-12">
+<!-- Logo & Title -->
+<div class="mb-12 text-center">
+<div class="w-24 h-24 bg-white/20 rounded-3xl mx-auto mb-6 flex items-center justify-center glass-effect floating">
+<span class="iconify text-6xl text-yellow-400" data-icon="mdi:cards-playing-outline"></span>
+</div>
+<h1 class="text-5xl font-bold tracking-widest mb-2 italic">CABO</h1>
+<p class="text-blue-200 text-sm tracking-widest">记忆、心理与博弈的巅峰</p>
+</div>
+<!-- 操作选项 -->
+<div class="w-full space-y-4 mb-16">
+<a class="w-full block" href="game.html">
+<button class="w-full py-4 rounded-2xl btn-primary text-slate-900 font-bold text-lg shadow-lg flex items-center justify-center gap-2">
+<span class="iconify text-2xl" data-icon="solar:play-bold"></span>
+                        开始对局
+                    </button>
+</a>
+<button class="w-full py-4 rounded-2xl glass-effect text-white font-medium text-lg flex items-center justify-center gap-2" onclick="document.getElementById('ruleModal').classList.remove('hidden')">
+<span class="iconify text-2xl" data-icon="solar:library-bold"></span>
+                    规则说明
+                </button>
+<div class="flex gap-4">
+<button class="flex-1 py-3 rounded-2xl glass-effect text-sm flex flex-col items-center gap-1">
+<span class="iconify text-xl text-yellow-500" data-icon="solar:ranking-bold"></span>
+                        排行榜
+                    </button>
+<button class="flex-1 py-3 rounded-2xl glass-effect text-sm flex flex-col items-center gap-1">
+<span class="iconify text-xl text-blue-400" data-icon="solar:settings-bold"></span>
+                        设置
+                    </button>
+</div>
+</div>
+<!-- 最近对局 -->
+<div class="w-full mt-auto mb-20">
+<p class="text-[10px] uppercase tracking-wider text-blue-300/60 mb-3 px-1">最近对局</p>
+<div class="glass-effect rounded-2xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center overflow-hidden border border-white/20">
+<img alt="Avatar" src="https://modao.cc/agent-py/media/generated_images/2026-03-07/1c4d9663d3104c16aeb13d8c7b9ec558.jpg"/>
+</div>
+<div>
+<p class="text-sm font-bold">阿强 (AI 专家)</p>
+<p class="text-[10px] text-green-400">获胜 • 12分</p>
+</div>
+</div>
+<span class="text-[10px] opacity-40">2026/03/07</span>
+</div>
+</div>
+</div>
+<!-- 规则模态框 -->
+<div class="hidden absolute inset-0 z-50 flex items-center justify-center px-6" id="ruleModal">
+<div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="this.parentElement.classList.add('hidden')"></div>
+<div class="relative bg-white text-slate-800 rounded-[32px] w-full max-h-[600px] overflow-hidden flex flex-col">
+<div class="p-6 border-b border-gray-100 flex justify-between items-center">
+<h3 class="text-xl font-bold">如何玩转 CABO?</h3>
+<button class="text-gray-400" onclick="document.getElementById('ruleModal').classList.add('hidden')">
+<span class="iconify text-2xl" data-icon="material-symbols:close"></span>
+</button>
+</div>
+<div class="p-6 overflow-y-auto space-y-6 text-sm leading-relaxed">
+<section>
+<h4 class="text-indigo-600 font-bold mb-2 flex items-center gap-2">
+<span class="iconify" data-icon="solar:flag-bold"></span>1. 游戏目标
+                        </h4>
+<p>持有手中数值总和最小的牌。当有人分数满100分时结束，分数最低者获胜。</p>
+</section>
+<section>
+<h4 class="text-indigo-600 font-bold mb-2 flex items-center gap-2">
+<span class="iconify" data-icon="solar:card-2-bold"></span>2. 特殊能力牌
+                        </h4>
+<ul class="grid grid-cols-1 gap-2">
+<li class="bg-gray-50 p-2 rounded-lg"><b class="text-emerald-600">7 或 8 (Peek):</b> 偷看自己的一张牌。</li>
+<li class="bg-gray-50 p-2 rounded-lg"><b class="text-blue-600">9 或 10 (Spy):</b> 偷看对手的一张牌。</li>
+<li class="bg-gray-50 p-2 rounded-lg"><b class="text-purple-600">11 或 12 (Swap):</b> 与对手交换一张牌（盲换）。</li>
+</ul>
+</section>
+<section>
+<h4 class="text-indigo-600 font-bold mb-2 flex items-center gap-2">
+<span class="iconify" data-icon="solar:megaphone-bold"></span>3. 喊出 "CABO"
+                        </h4>
+<p>当你觉得自己的分最低时，轮到你时喊出“CABO”。其他玩家还有最后一轮机会。如果你确实最低，本轮得0分！</p>
+</section>
+</div>
+<div class="p-6 bg-gray-50">
+<button class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold" onclick="document.getElementById('ruleModal').classList.add('hidden')">
+                        准备好了
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

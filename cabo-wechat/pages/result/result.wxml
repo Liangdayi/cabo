@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="result-header">
+    <text class="result-title">游戏结束</text>
+    <text class="result-subtitle">本轮得分</text>
+  </view>
+  
+  <view class="players-results">
+    <view wx:for="{{players}}" wx:key="item.id" class="player-result {{player.isWinner ? 'winner' : ''}}">
+      <image class="player-avatar" src="{{player.avatar || '../../images/default-avatar.png'}}" />
+      <text class="player-name">{{player.name}}</text>
+      <text class="player-round-score">本轮得分：{{player.roundScore}}</text>
+      <text class="player-total-score">总得分：{{player.score}}</text>
+      <text class="winner-badge" wx:if="player.isWinner">获胜者</text>
+    </view>
+  </view>
+  
+  <view class="summary">
+    <text class="summary-title">游戏总结</text>
+    <text class="summary-content">
+      {{winnerName}} 获得了胜利！
+    </text>
+    <text class="summary-content">
+      最终得分：{{winnerScore}}
+    </text>
+  </view>
+  
+  <view class="actions">
+    <button class="btn btn-primary" bindtap="playAgain">再来一局</button>
+    <button class="btn btn-secondary" bindtap="backToHome">返回首页</button>
+  </view>
+</view>

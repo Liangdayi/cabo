@@ -1,0 +1,128 @@
+/* 结果页面样式 */
+.container {
+  padding: 30rpx 20rpx;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.result-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #57C5B6;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.result-subtitle {
+  font-size: 24rpx;
+  color: #159895;
+}
+
+.players-results {
+  width: 100%;
+  max-width: 600rpx;
+  margin-bottom: 40rpx;
+}
+
+.player-result {
+  background-color: rgba(26, 95, 122, 0.3);
+  border-radius: 16rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.player-result.winner {
+  background-color: rgba(87, 197, 182, 0.3);
+  border: 2rpx solid #57C5B6;
+}
+
+.player-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-bottom: 15rpx;
+}
+
+.player-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.player-round-score {
+  font-size: 24rpx;
+  color: #159895;
+  margin-bottom: 5rpx;
+  display: block;
+}
+
+.player-total-score {
+  font-size: 24rpx;
+  color: #57C5B6;
+  font-weight: bold;
+  display: block;
+}
+
+.winner-badge {
+  position: absolute;
+  top: -10rpx;
+  right: 20rpx;
+  background-color: #FFD700;
+  color: #002B5B;
+  font-size: 20rpx;
+  font-weight: bold;
+  padding: 5rpx 15rpx;
+  border-radius: 15rpx;
+}
+
+.summary {
+  background-color: rgba(26, 95, 122, 0.2);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+  text-align: center;
+  width: 100%;
+  max-width: 600rpx;
+}
+
+.summary-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #57C5B6;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.summary-content {
+  font-size: 24rpx;
+  color: #FFFFFF;
+  line-height: 1.5;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.actions {
+  width: 100%;
+  max-width: 600rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+}

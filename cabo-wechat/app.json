@@ -1,0 +1,30 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/room/room",
+    "pages/game/game",
+    "pages/result/result"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#002B5B",
+    "navigationBarTitleText": "Cabo卡波",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#FFFFFF",
+    "selectedColor": "#57C5B6",
+    "backgroundColor": "#002B5B",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/room/room",
+        "text": "房间"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

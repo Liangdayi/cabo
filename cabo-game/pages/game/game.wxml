@@ -1,0 +1,350 @@
+<view class="game-container">
+  <view class="toast" wx:if="{{showMessage}}">{{message}}</view>
+  
+  <view class="header">
+    <view class="header-left">
+      <view class="back-btn" bindtap="onBackToHome">
+        <text class="back-icon">←</text>
+      </view>
+      <text class="round-badge">Round {{roundNumber}}</text>
+    </view>
+    <view class="header-right">
+      <text class="score-badge">总分: {{myTotalScore}}</text>
+    </view>
+  </view>
+
+  <view class="opponents-area">
+    <view class="opponent" wx:for="{{opponents}}" wx:key="id">
+      <view class="opponent-info">
+        <view class="opponent-avatar">{{item.name[0]}}</view>
+        <view class="opponent-detail">
+          <text class="opponent-name">{{item.name}}</text>
+          <text class="opponent-score">{{item.totalScore}}分</text>
+        </view>
+      </view>
+      <view class="opponent-cards">
+        <view class="card card-back card-small" wx:for="{{item.cards}}" wx:key="index">
+          <text wx:if="{{item.isFaceUp}}">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="center-area">
+    <view class="pile-area">
+      <view class="pile draw-pile" bindtap="onDrawFromPile">
+        <view class="card card-back pile-card">
+          <text class="pile-icon">🎴</text>
+        </view>
+        <text class="pile-label">抽牌堆</text>
+        <text class="pile-count">{{drawPileCount}}</text>
+      </view>
+      
+      <view class="pile discard-pile" bindtap="onTakeFromDiscard">
+        <view class="card card-front pile-card" wx:if="{{topDiscard}}">
+          <text class="card-value" style="color: {{topDiscard.color}}">{{topDiscard.displayValue}}</text>
+          <text class="card-suit" style="color: {{topDiscard.color}}">{{topDiscard.suitSymbol}}</text>
+          <view class="ability-badge" wx:if="{{topDiscard.hasAbility && topDiscard.canPick}}">
+            {{topDiscard.abilityName}}
+          </view>
+        </view>
+        <view class="card card-empty pile-card" wx:else></view>
+        <text class="pile-label">弃牌堆</text>
+      </view>
+    </view>
+    
+    <view class="turn-indicator" wx:if="{{isMyTurn}}">
+      <text class="turn-text">你的回合</text>
+    </view>
+    <view class="turn-indicator opponent-turn" wx:else>
+      <text class="turn-text">{{currentPlayerName}} 思考中...</text>
+    </view>
+  </view>
+
+  <view class="player-area">
+    <view class="player-score-row">
+      <view class="history-scores">
+        <text class="history-label">历史手牌值</text>
+        <view class="history-list" wx:if="{{historyScores.length > 0}}">
+          <text class="history-item" wx:for="{{historyScores}}" wx:key="index">第{{item.round}}轮: {{item.score}}分</text>
+        </view>
+        <text class="history-empty" wx:else>暂无记录</text>
+      </view>
+      <button class="cabo-btn {{hasCalledCabo ? 'disabled' : ''}}" 
+              bindtap="onCallCabo" 
+              disabled="{{!isMyTurn || hasCalledCabo || turnPhase !== 'action'}}">
+        喊 CABO!
+      </button>
+    </view>
+    
+    <view class="my-cards">
+      <view class="card card-{{item.isFaceUp ? 'front' : 'back'}}" 
+            wx:for="{{myCards}}" 
+            wx:key="index"
+            bindtap="onCardTap"
+            data-index="{{index}}">
+        <block wx:if="{{item.isFaceUp}}">
+          <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+          <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
+        </block>
+        <block wx:else>
+          <text class="card-index">{{index + 1}}</text>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-sheet" wx:if="{{showActionSheet}}">
+    <view class="action-sheet-mask" bindtap="onCancelExchange"></view>
+    <view class="action-sheet-content">
+      <view class="drawn-card-display">
+        <view class="card card-front drawn-card">
+          <text class="card-value" style="color: {{drawnCard.color}}">{{drawnCard.displayValue}}</text>
+          <text class="card-suit" style="color: {{drawnCard.color}}">{{drawnCard.suitSymbol}}</text>
+        </view>
+        <text class="drawn-card-label">抽到的牌</text>
+        <view class="ability-hint" wx:if="{{drawnCard.hasAbility}}">
+          可发动技能: {{drawnCard.abilityName}}
+        </view>
+      </view>
+      
+      <view class="action-buttons">
+        <button class="action-btn action-btn-primary" bindtap="onActionExchange">
+          交换
+        </button>
+        <button class="action-btn action-btn-warning" bindtap="onActionUseAbility" wx:if="{{drawnCard.hasAbility}}">
+          发动技能
+        </button>
+        <button class="action-btn action-btn-danger" bindtap="onActionDiscard">
+          弃牌
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showExchangeModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content">
+      <text class="modal-title">选择要交换的牌</text>
+      <text class="modal-hint">可以选择1张或多张牌进行交换</text>
+      
+      <view class="exchange-cards">
+        <view class="card card-{{item.isKnown || item.isFaceUp ? 'front' : 'back'}} exchange-card {{selectedExchangeIndices.indexOf(index) >= 0 ? 'selected' : ''}}" 
+              wx:for="{{myCards}}" 
+              wx:key="index"
+              bindtap="onSelectExchangeCard"
+              data-index="{{index}}">
+          <block wx:if="{{item.isKnown || item.isFaceUp}}">
+            <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+            <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
+          </block>
+          <block wx:else>
+            <text class="card-index">{{index + 1}}</text>
+          </block>
+          <view class="select-mark" wx:if="{{selectedExchangeIndices.indexOf(index) >= 0}}">✓</view>
+        </view>
+      </view>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" bindtap="onCancelExchange">取消</button>
+        <button class="modal-btn modal-btn-confirm" bindtap="onConfirmExchange">确认交换</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showAbilityModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content">
+      <text class="modal-title">发动技能</text>
+      <text class="modal-hint">{{abilityCard.displayValue}}{{abilityCard.suitSymbol}} - {{abilityCard.abilityName}}</text>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" bindtap="onSkipAbility">跳过</button>
+        <button class="modal-btn modal-btn-confirm" bindtap="onUseAbility">发动</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showPeekModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content">
+      <text class="modal-title">偷看自己的牌</text>
+      <text class="modal-hint">选择一张暗牌查看</text>
+      
+      <view class="exchange-cards">
+        <view class="card card-{{item.isKnown || item.isFaceUp ? 'front' : 'back'}} exchange-card" 
+              wx:for="{{myCards}}" 
+              wx:key="index"
+              bindtap="onSelectPeekCard"
+              data-index="{{index}}">
+          <block wx:if="{{item.isKnown || item.isFaceUp}}">
+            <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+            <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
+          </block>
+          <block wx:else>
+            <text class="card-index">{{index + 1}}</text>
+          </block>
+        </view>
+      </view>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" bindtap="onClosePeekModal">关闭</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showSpyModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content">
+      <text class="modal-title">查看对手的牌</text>
+      <text class="modal-hint">选择一个对手查看其暗牌</text>
+      
+      <view class="spy-targets">
+        <view class="spy-target" 
+              wx:for="{{opponents}}" 
+              wx:key="id"
+              bindtap="onSelectSpyTarget"
+              data-player-index="{{index + 1}}">
+          <view class="opponent-avatar">{{item.name[0]}}</view>
+          <text>{{item.name}}</text>
+        </view>
+      </view>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" bindtap="onCloseSpyModal">关闭</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showSwapModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content swap-modal">
+      <text class="modal-title">交换牌</text>
+      
+      <view class="swap-section">
+        <text class="swap-label">选择你的牌</text>
+        <view class="swap-cards">
+          <view class="card card-{{item.isKnown || item.isFaceUp ? 'front' : 'back'}} swap-card {{swapMyCardIndex === index ? 'selected' : ''}}" 
+                wx:for="{{myCards}}" 
+                wx:key="index"
+                bindtap="onSelectSwapMyCard"
+                data-index="{{index}}">
+            <block wx:if="{{item.isKnown || item.isFaceUp}}">
+              <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+            </block>
+            <block wx:else>
+              <text class="card-index">{{index + 1}}</text>
+            </block>
+          </view>
+        </view>
+      </view>
+      
+      <view class="swap-section">
+        <text class="swap-label">选择对手的牌</text>
+        <view class="swap-cards">
+          <view class="card card-back swap-card {{swapTargetCardIndex === index && swapTargetPlayerIndex === 1 ? 'selected' : ''}}" 
+                wx:for="{{4}}" 
+                wx:key="index"
+                bindtap="onSelectSwapTarget"
+                data-player-index="{{1}}"
+                data-card-index="{{index}}">
+            <text class="card-index">{{index + 1}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" bindtap="onCloseSwapModal">取消</button>
+        <button class="modal-btn modal-btn-confirm" bindtap="onConfirmSwap">确认交换</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showRoundEndModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content result-modal">
+      <text class="modal-title">回合结束</text>
+      
+      <view class="result-list">
+        <view class="result-item" wx:for="{{roundEndData}}" wx:key="id">
+          <text class="result-name">{{item.name}}</text>
+          <text class="result-hand">手牌: {{item.handSum}}</text>
+          <text class="result-round">本轮: {{item.roundScore}}</text>
+          <text class="result-total">总分: {{item.totalScore}}</text>
+          <text class="result-cabo" wx:if="{{item.calledCabo}}">CABO</text>
+        </view>
+      </view>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-confirm" bindtap="onCloseRoundEndModal">继续</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal" wx:if="{{showGameEndModal}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content result-modal">
+      <text class="modal-title">游戏结束</text>
+      <text class="winner-text">🏆 {{gameEndData.winner.name}} 获胜！</text>
+      
+      <view class="result-list">
+        <view class="result-item {{item.id === gameEndData.winner.id ? 'winner' : ''}}" 
+              wx:for="{{gameEndData.scores}}" 
+              wx:key="id">
+          <text class="result-name">{{item.name}}</text>
+          <text class="result-total">总分: {{item.totalScore}}</text>
+        </view>
+      </view>
+      
+      <view class="modal-buttons">
+        <button class="modal-btn modal-btn-confirm" bindtap="onCloseGameEndModal">返回首页</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal peek-phase-modal" wx:if="{{showPeekPhase}}">
+    <view class="modal-mask"></view>
+    <view class="modal-content peek-content">
+      <text class="modal-title">开局偷看牌</text>
+      <text class="modal-hint">{{peekMessage}}</text>
+      
+      <view class="peek-cards-select" wx:if="{{turnPhase === 'peek_select'}}">
+        <view class="card card-{{item.isPeeking ? 'front' : 'back'}} peek-card {{item.isPeeking ? 'selected' : ''}}" 
+              wx:for="{{myCards}}" 
+              wx:key="index"
+              bindtap="onPeekCardTap"
+              data-index="{{index}}">
+          <block wx:if="{{item.isPeeking}}">
+            <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+            <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
+          </block>
+          <block wx:else>
+            <text class="card-index">{{index + 1}}</text>
+          </block>
+        </view>
+      </view>
+      
+      <view class="peek-viewing" wx:if="{{turnPhase === 'peek_view'}}">
+        <view class="countdown-display">
+          <text class="countdown-number">{{peekCountdown}}</text>
+          <text class="countdown-label">秒后自动暗置</text>
+        </view>
+        <view class="peek-cards-view">
+          <view class="card card-front peek-view-card" wx:for="{{peekViewingCards}}" wx:key="index">
+            <text class="card-value" style="color: {{item.color}}">{{item.displayValue}}</text>
+            <text class="card-suit" style="color: {{item.color}}">{{item.suitSymbol}}</text>
+            <text class="card-position">位置 {{item.index + 1}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="modal-buttons" wx:if="{{turnPhase === 'peek_select'}}">
+        <button class="modal-btn modal-btn-confirm {{peekSelectedCount !== 2 ? 'disabled' : ''}}" 
+                bindtap="onConfirmPeekCards"
+                disabled="{{peekSelectedCount !== 2}}">
+          确认查看 ({{peekSelectedCount}}/2)
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

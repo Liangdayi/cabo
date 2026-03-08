@@ -1,0 +1,52 @@
+<view class="result-container">
+  <view class="result-header">
+    <text class="result-title">{{isWinner ? '🏆 恭喜获胜!' : '游戏结束'}}</text>
+    <text class="result-subtitle">{{isWinner ? '你以最低分赢得了比赛' : '再接再厉，下次一定能赢'}}</text>
+  </view>
+
+  <view class="ranking-section">
+    <text class="section-title">最终排名</text>
+    <view class="ranking-list">
+      <view class="ranking-item {{index === 0 ? 'champion' : ''}}" wx:for="{{rankings}}" wx:key="id">
+        <view class="rank-badge">{{index + 1}}</view>
+        <view class="rank-avatar">{{item.name[0]}}</view>
+        <view class="rank-info">
+          <text class="rank-name">{{item.name}}</text>
+          <text class="rank-score">{{item.totalScore}}分</text>
+        </view>
+        <view class="rank-badge-winner" wx:if="{{index === 0}}">👑</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="stats-section">
+    <text class="section-title">游戏统计</text>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{gameStats.rounds}}</text>
+        <text class="stat-label">总轮数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{gameStats.myTotalScore}}</text>
+        <text class="stat-label">我的总分</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{gameStats.caboCount}}</text>
+        <text class="stat-label">喊CABO次数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{gameStats.abilityCount}}</text>
+        <text class="stat-label">技能使用次数</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-section">
+    <button class="btn btn-primary btn-large" bindtap="playAgain">
+      再来一局
+    </button>
+    <button class="btn btn-secondary" bindtap="backToHome">
+      返回首页
+    </button>
+  </view>
+</view>

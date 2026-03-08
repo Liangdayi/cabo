@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="logo">
+    <text class="title">Cabo 卡波</text>
+    <text class="subtitle">2-4人卡牌策略游戏</text>
+  </view>
+  
+  <view class="options">
+    <view class="option-card">
+      <button class="btn btn-primary" bindtap="createRoom">创建房间</button>
+      <text class="option-desc">创建新的游戏房间</text>
+    </view>
+    
+    <view class="option-card">
+      <view class="input-group">
+        <input 
+          class="input" 
+          placeholder="输入房间号" 
+          placeholder-class="input-placeholder"
+          bindinput="onRoomIdInput"
+        />
+        <button class="btn btn-secondary" bindtap="joinRoom">加入房间</button>
+      </view>
+      <text class="option-desc">输入房间号加入游戏</text>
+    </view>
+  </view>
+  
+  <view class="player-count">
+    <text class="player-count-label">玩家人数：</text>
+    <view class="player-count-options">
+      <button 
+        wx:for="[2, 3, 4]" 
+        wx:key="item"
+        class="player-count-btn {{selectedPlayerCount === item ? 'selected' : ''}}"
+        bindtap="selectPlayerCount"
+        data-count="{{item}}"
+      >
+        {{item}}人
+      </button>
+    </view>
+  </view>
+  
+  <view class="rules">
+    <text class="rules-title">游戏规则</text>
+    <text class="rules-content">
+      目标：让面前4张牌总和尽量小，总分先到100分游戏结束，最低分获胜
+    </text>
+    <text class="rules-content">
+      回合行动：抽牌堆、捡弃牌堆、喊CABO
+    </text>
+    <text class="rules-content">
+      特殊能力：7-12弃牌时可用
+    </text>
+  </view>
+</view>

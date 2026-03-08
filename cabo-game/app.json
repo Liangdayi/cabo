@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/room/room",
+    "pages/game/game",
+    "pages/result/result"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1a2a6c",
+    "navigationBarTitleText": "Cabo 卡波",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#073b3a"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,99 @@
+<view class="home-container">
+  <view class="logo-section">
+    <view class="logo-icon animate-float">
+      <text class="logo-emoji">🃏</text>
+    </view>
+    <text class="title">CABO</text>
+    <text class="subtitle">记忆、心理与博弈的巅峰</text>
+  </view>
+
+  <view class="action-section">
+    <button class="btn btn-primary btn-large" bindtap="startGame">
+      <text class="btn-icon">▶</text>
+      开始对局
+    </button>
+    
+    <button class="btn btn-secondary" bindtap="showRules">
+      <text class="btn-icon">📖</text>
+      规则说明
+    </button>
+  </view>
+
+  <view class="player-count-section">
+    <text class="section-label">玩家人数</text>
+    <view class="player-count-options">
+      <view class="count-option {{playerCount === 2 ? 'selected' : ''}}" 
+            bindtap="selectPlayerCount" data-count="2">2人</view>
+      <view class="count-option {{playerCount === 3 ? 'selected' : ''}}" 
+            bindtap="selectPlayerCount" data-count="3">3人</view>
+      <view class="count-option {{playerCount === 4 ? 'selected' : ''}}" 
+            bindtap="selectPlayerCount" data-count="4">4人</view>
+    </view>
+  </view>
+
+  <view class="history-section" wx:if="{{gameHistory.length > 0}}">
+    <text class="section-label">最近对局</text>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{gameHistory}}" wx:key="date">
+        <view class="history-info">
+          <text class="history-result {{item.isWinner ? 'winner' : ''}}">{{item.isWinner ? '获胜' : '失败'}}</text>
+          <text class="history-score">{{item.score}}分</text>
+        </view>
+        <text class="history-date">{{item.date}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="rules-modal" wx:if="{{showRulesModal}}">
+    <view class="modal-mask" bindtap="hideRules"></view>
+    <view class="modal-content rules-content">
+      <view class="modal-header">
+        <text class="modal-title">如何玩转 CABO?</text>
+        <view class="modal-close" bindtap="hideRules">×</view>
+      </view>
+      
+      <scroll-view scroll-y class="rules-scroll">
+        <view class="rule-section">
+          <text class="rule-title">🎯 游戏目标</text>
+          <text class="rule-text">持有手中数值总和最小的牌。当有人分数满100分时结束，分数最低者获胜。</text>
+        </view>
+
+        <view class="rule-section">
+          <text class="rule-title">🃏 特殊能力牌</text>
+          <view class="ability-list">
+            <view class="ability-item">
+              <text class="ability-card">7/8</text>
+              <text class="ability-desc">偷看自己的一张暗牌</text>
+            </view>
+            <view class="ability-item">
+              <text class="ability-card">9/10</text>
+              <text class="ability-desc">偷看对手的一张暗牌</text>
+            </view>
+            <view class="ability-item">
+              <text class="ability-card">11/12</text>
+              <text class="ability-desc">与对手交换一张牌（盲换）</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="rule-section">
+          <text class="rule-title">📢 喊出 "CABO"</text>
+          <text class="rule-text">当你觉得自己的分最低时，轮到你时喊出"CABO"。其他玩家还有最后一轮机会。如果你确实最低，本轮得0分！</text>
+        </view>
+
+        <view class="rule-section">
+          <text class="rule-title">🔄 交换规则</text>
+          <text class="rule-text">单张交换：抽1换1，抽牌堆来的暗置，弃牌堆来的明置</text>
+          <text class="rule-text">多张交换：用抽来的1张换自己多张同数字牌，验证成功则替换，失败则新牌入队；换3张以上失败还要多抽1张惩罚牌</text>
+        </view>
+
+        <view class="rule-section">
+          <text class="rule-title">⚡ 技能牌规则</text>
+          <text class="rule-text">发动技能后，牌进入弃牌区，但标记为"不可捡取"，其他玩家无法从弃牌区捡取此牌。</text>
+        </view>
+      </scroll-view>
+
+      <button class="btn btn-primary" bindtap="hideRules">准备好了</button>
+    </view>
+  </view>
+</view>

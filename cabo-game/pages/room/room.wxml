@@ -1,0 +1,54 @@
+<view class="room-container">
+  <view class="room-header">
+    <text class="room-title">房间</text>
+    <view class="room-id-box">
+      <text class="room-id-label">房间号</text>
+      <text class="room-id-value">{{roomId}}</text>
+      <text class="copy-btn" bindtap="copyRoomId">复制</text>
+    </view>
+  </view>
+
+  <view class="players-section">
+    <text class="section-title">玩家列表 ({{players.length}}/4)</text>
+    <view class="players-list">
+      <view class="player-item {{item.isReady ? 'ready' : ''}}" wx:for="{{players}}" wx:key="id">
+        <view class="player-avatar">{{item.name[0]}}</view>
+        <view class="player-info">
+          <text class="player-name">{{item.name}}</text>
+          <text class="player-status">{{item.isReady ? '已准备' : '等待中...'}}</text>
+        </view>
+        <view class="ready-badge" wx:if="{{item.isReady}}">✓</view>
+      </view>
+      
+      <view class="player-item empty" wx:for="{{4 - players.length}}" wx:key="index">
+        <view class="player-avatar empty-avatar">+</view>
+        <text class="player-name empty-text">等待加入...</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <text class="section-title">游戏设置</text>
+    <view class="setting-item">
+      <text class="setting-label">目标分数</text>
+      <text class="setting-value">100分</text>
+    </view>
+    <view class="setting-item">
+      <text class="setting-label">特殊规则</text>
+      <text class="setting-value">100分重置为50分</text>
+    </view>
+  </view>
+
+  <view class="action-section">
+    <button class="btn btn-primary btn-large" bindtap="startGame" wx:if="{{isCreator && canStart}}">
+      开始游戏
+    </button>
+    <button class="btn btn-secondary btn-large" bindtap="startGame" wx:if="{{isCreator && !canStart}}" disabled>
+      等待玩家准备
+    </button>
+    <button class="btn btn-primary btn-large" bindtap="toggleReady" wx:if="{{!isCreator}}">
+      {{isReady ? '取消准备' : '准备'}}
+    </button>
+    <button class="btn btn-danger" bindtap="leaveRoom">离开房间</button>
+  </view>
+</view>

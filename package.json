@@ -1,0 +1,24 @@
+{
+  "name": "cabo-game",
+  "version": "1.0.0",
+  "description": "Cabo卡牌游戏微信小程序",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "cabo-game/utils/**/*.js"
+    ],
+    "coverageDirectory": "coverage",
+    "verbose": true
+  }
+}
