@@ -423,23 +423,15 @@ Page({
   onActionDiscard() {
     const card = this.data.drawnCard
     
-    if (card.hasAbility) {
-      this.setData({
-        showAbilityModal: true,
-        abilityCard: card,
-        abilityType: getAbilityType(card.value)
-      })
-    } else {
-      this.gameEngine.discardCard({
-        value: card.value,
-        suit: card.suit,
-        id: card.id
-      }, false)
-      this.setData({ 
-        showActionSheet: false,
-        drawnCard: null
-      })
-    }
+    this.gameEngine.discardCard({
+      value: card.value,
+      suit: card.suit,
+      id: card.id
+    }, false)
+    this.setData({ 
+      showActionSheet: false,
+      drawnCard: null
+    })
   },
 
   onActionUseAbility() {
