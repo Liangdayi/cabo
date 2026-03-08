@@ -127,7 +127,7 @@ Page({
             suitSymbol: getSuitSymbol(c.card.suit),
             color: getCardColor(c.card)
           })),
-          peekCountdown: 10,
+          peekCountdown: 3,
           turnPhase: 'peek_view'
         })
 
@@ -270,7 +270,7 @@ Page({
         suitSymbol: getSuitSymbol(c.card.suit),
         color: getCardColor(c.card)
       })),
-      peekCountdown: 10
+      peekCountdown: 3
     })
 
     if (this.peekTimer) {
